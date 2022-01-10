@@ -25,6 +25,7 @@ const defaultOptions: Omit<SearchControlProps, 'provider'> = {
   style: 'button',
   showMarker: true,
   showPopup: false,
+  popUpCustomOptions: {},
   popupFormat: ({ result }) => `${result.label}`,
   resultFormat: ({ result }) => `${result.label}`,
   marker: {
@@ -75,6 +76,7 @@ interface SearchControlProps {
   maxMarkers: number;
   showMarker: boolean;
   showPopup: boolean;
+  popUpCustomOptions: {};
   popupFormat<T = any>(args: {
     query: Selection;
     result: SearchResult<T>;
@@ -406,7 +408,7 @@ const Control: SearchControl = {
   },
 
   addMarker(result, query) {
-    const { marker: options, showPopup, popupFormat } = this.options;
+    const { marker: options, showPopup, popupFormat, popUpCustomOptions} = this.options;
     const marker = new L.Marker([result.y, result.x], options);
     let popupLabel = result.label;
 
@@ -414,7 +416,7 @@ const Control: SearchControl = {
       popupLabel = popupFormat({ query, result });
     }
 
-    marker.bindPopup(popupLabel);
+    marker.bindPopup(popupLabel,popUpCustomOptions);
 
     this.markers.addLayer(marker);
 
